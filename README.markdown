@@ -100,14 +100,24 @@ $topic->publish('message payload');
 
 namespace AcmeBundle;
 
-use nsqphp\Message\Message;
+use nsqphp\Exception;
 use Socloz\NsqBundle\Consumer\ConsumerInterface;
 
 class Consumer1 implements ConsumerInterface
 {
     public function consume($topic, $channel, $payload)
     {
-        // ...
+        if (...) {
+            // Stops message processing and finishes it in normal way (as a
+            // successful message process)
+            throw new Exception\ExpiredMessageException();
+        }
+
+        if (...) {
+            // Forces requeue of the message with the specified delay (and thus
+            // bypasses the topic's requeue strategy)
+            throw new Exception\RequeueMessageException(10);
+        }
     }
 }
 ```
@@ -164,6 +174,16 @@ Get consumers list for a given topic
 
 ```
 app/console socloz:nsq:topic:list <topic>
+```
+
+# Tests
+
+Unit tests need for now a nsqd running on localhost, port 4150.
+You also need PHPUnit and composer.
+
+```
+php composer.phar install --dev
+phpunit
 ```
 
 # TODO
