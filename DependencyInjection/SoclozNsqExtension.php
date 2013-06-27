@@ -40,12 +40,12 @@ class SoclozNsqExtension extends Extension
                 )
             );
         }
-        $def->addMethodCall('setDelayedMessagesTopic', $config['delayed_messages_topic']);
+        $def->addMethodCall('setDelayedMessagesTopic', array($config['delayed_messages_topic']));
         foreach ($config['topics'] as $name => $conf) {
             $def->addMethodCall('setTopic', array($name, $conf));
             if ($conf['consumers']) {
                 foreach ($conf['consumers'] as $channel => $service) {
-                    $def->addMethodCall('addTopicConsumer', array(
+                    $def->addMethodCall('setTopicConsumer', array(
                         $name,
                         $channel,
                         new Reference($service)

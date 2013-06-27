@@ -19,7 +19,7 @@ class ConsumerCompilerPass implements CompilerPassInterface
         foreach ($taggedServices as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
                 $definition->addMethodCall(
-                    'addQueueConsumer',
+                    'setTopicConsumer',
                     array(
                         $attributes['topic'],
                         $attributes['channel'],
