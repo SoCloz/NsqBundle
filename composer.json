@@ -1,0 +1,26 @@
+{
+    "name": "socloz/nsq-bundle",
+    "description": "Message queuing bundle for Symfony2 based on nsqphp",
+    "homepage": "",
+    "keywords": [ "nsq", "nsqphp", "message", "queue", "requeue", "delay", "bundle" ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "CloseToMe",
+            "email": "technique@closetome.fr",
+            "homepage": "http://www.socloz.fr"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.2",
+        "socloz/nsqphp": "dev-socloz"
+    },
+    "require-dev": {
+        "symfony/class-loader": "2.2.x-dev"
+    },
+    "autoload": {
+        "psr-0": { "Socloz\\NsqBundle": "" }
+    },
+     "target-dir": "Socloz/NsqBundle"
+}

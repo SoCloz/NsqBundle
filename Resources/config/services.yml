@@ -1,0 +1,12 @@
+parameters:
+  socloz.nsq.delayed.topic_name: __socloz_delayed
+
+services:
+  socloz.nsq:
+    class: Socloz\NsqBundle\Topic\Manager
+    arguments: [%socloz.nsq.delayed.topic_name%, "@?socloz.nsq.lookup"]
+  socloz.nsq.delayed_messages.consumer:
+    class: Socloz\NsqBundle\Delayed\Consumer
+    arguments: ["@socloz.nsq"]
+    tags:
+    -  { name: socloz.nsq.consumer, topic: %socloz.nsq.delayed.topic_name%, channel: default }
