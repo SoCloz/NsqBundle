@@ -9,8 +9,6 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-use Socloz\NsqBundle\Topic\Topic;
-
 /**
  * This is the class that loads and manages your bundle configuration
  *
@@ -52,6 +50,13 @@ class SoclozNsqExtension extends Extension
                     ));
                 }
             }
+            $tsd = new Definition(
+                'Socloz\NsqBundle\Topic\Topic',
+                array($name)
+            );
+            $tsd->setFactoryService('socloz.nsq');
+            $tsd->setFactoryMethod('getTopic');
+            $container->setDefinition('socloz.nsq.topic.' . $name, $tsd);
         }
     }
 }

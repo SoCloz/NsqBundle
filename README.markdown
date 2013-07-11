@@ -89,6 +89,12 @@ use nsqphp\Message\Message;
 // ...
 
 $topic = $container->get('socloz.nsq')->getTopic('foo');
+// or simply
+$topic = $container->get('socloz.nsq.topic.foo');
+// It can also be a fancy way to directly inject a topic as service dependency
+// instead of injecting both the topic manager and the topic name.
+
+// then
 $topic->publish('message payload');
 ```
 
