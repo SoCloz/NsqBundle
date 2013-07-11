@@ -2,15 +2,21 @@
 
 namespace Socloz\NsqBundle\Topic;
 
-use nsqphp\nsqphp;
 use nsqphp\Lookup\Nsqlookupd;
 use nsqphp\Lookup\FixedHosts;
+use nsqphp\Logger\LoggerInterface;
 
 use Socloz\NsqBundle\Consumer\ConsumerInterface;
 use Socloz\NsqBundle\Delayed\Topic as DelayedMessagesTopic;
 
 class Manager
 {
+    /**
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
     /**
      *
      * @var string
@@ -33,9 +39,11 @@ class Manager
      *
      * @param string $delayedMessagesTopicName
      * @param \nsqphp\Lookup\Nsqlookupd $lookupd
+     * @param \nsqphp\Logger\LoggerInterface $logger
      */
-    public function __construct($delayedMessagesTopicName, Nsqlookupd $lookupd = null)
+    public function __construct($delayedMessagesTopicName, Nsqlookupd $lookupd = null, LoggerInterface $logger = null)
     {
+        $this->logger = $logger;
         $this->delayedMessagesTopicName = $delayedMessagesTopicName;
         $this->lookupd = $lookupd;
     }
@@ -45,7 +53,8 @@ class Manager
         $topic = new DelayedMessagesTopic(
             $this->delayedMessagesTopicName,
             array($conf['publish_to']),
-            new FixedHosts(array($conf['publish_to']))
+            new FixedHosts(array($conf['publish_to'])),
+            $this->logger
         );
         if (isset($conf['requeue_strategy'])) {
             $this->setRequeueStrategy($topic, $conf['requeue_strategy']);
@@ -66,7 +75,7 @@ class Manager
     public function setTopic($name, array $conf)
     {
         $lookupd = $this->lookupd ?: new FixedHosts($conf['publish_to']);
-        $topic = new Topic($name, $conf['publish_to'], $lookupd);
+        $topic = new Topic($name, $conf['publish_to'], $lookupd, $this->logger);
         $dmt = $this->getDelayedMessagesTopic();
         if ($dmt) {
             $topic->setDelayedMessagesTopic($dmt);

@@ -3,6 +3,7 @@
 namespace Socloz\NsqBundle\Topic;
 
 use nsqphp\nsqphp;
+use nsqphp\Logger\LoggerInterface;
 use nsqphp\Message\Message;
 use nsqphp\Lookup\LookupInterface;
 use nsqphp\RequeueStrategy\RequeueStrategyInterface;
@@ -55,10 +56,10 @@ class Topic
      */
     private $subscribedChannels = array();
 
-    public function __construct($name, array $hosts, LookupInterface $lookup = null)
+    public function __construct($name, array $hosts, LookupInterface $lookup = null, LoggerInterface $logger = null)
     {
         $this->name = $name;
-        $this->nsq = new nsqphp($lookup);
+        $this->nsq = new nsqphp($lookup, null, null, $logger);
         $this->publishToHosts = $hosts;
     }
 

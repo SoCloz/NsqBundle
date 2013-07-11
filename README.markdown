@@ -191,6 +191,3 @@ You also need PHPUnit and composer.
 php composer.phar install --dev
 phpunit
 ```
-
-# TODO
-- Inject logger
