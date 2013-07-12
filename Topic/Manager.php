@@ -37,6 +37,12 @@ class Manager
 
     /**
      *
+     * @var boolean
+     */
+    private $stubMode = false;
+
+    /**
+     *
      * @param string $delayedMessagesTopicName
      * @param \nsqphp\Lookup\Nsqlookupd $lookupd
      * @param \nsqphp\Logger\LoggerInterface $logger
@@ -46,6 +52,15 @@ class Manager
         $this->logger = $logger;
         $this->delayedMessagesTopicName = $delayedMessagesTopicName;
         $this->lookupd = $lookupd;
+    }
+
+    /**
+     *
+     * @param boolean $b
+     */
+    public function setStubMode($b)
+    {
+        $this->stubMode = (bool) $b;
     }
 
     public function setDelayedMessagesTopic(array $conf)
@@ -74,14 +89,18 @@ class Manager
      */
     public function setTopic($name, array $conf)
     {
-        $lookupd = $this->lookupd ?: new FixedHosts($conf['publish_to']);
-        $topic = new Topic($name, $conf['publish_to'], $lookupd, $this->logger);
-        $dmt = $this->getDelayedMessagesTopic();
-        if ($dmt) {
-            $topic->setDelayedMessagesTopic($dmt);
-        }
-        if (isset($conf['requeue_strategy'])) {
-            $this->setRequeueStrategy($topic, $conf['requeue_strategy']);
+        if ($this->stubMode) {
+            $topic = new Stub($name);
+        } else {
+            $lookupd = $this->lookupd ?: new FixedHosts($conf['publish_to']);
+            $topic = new Topic($name, $conf['publish_to'], $lookupd, $this->logger);
+            $dmt = $this->getDelayedMessagesTopic();
+            if ($dmt) {
+                $topic->setDelayedMessagesTopic($dmt);
+            }
+            if (isset($conf['requeue_strategy'])) {
+                $this->setRequeueStrategy($topic, $conf['requeue_strategy']);
+            }
         }
         $this->topics[$topic->getName()] = $topic;
     }

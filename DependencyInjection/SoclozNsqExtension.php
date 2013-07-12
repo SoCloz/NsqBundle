@@ -39,6 +39,7 @@ class SoclozNsqExtension extends Extension
             );
         }
         $def->addMethodCall('setDelayedMessagesTopic', array($config['delayed_messages_topic']));
+        $def->addMethodCall('setStubMode', array($config['stub']));
         foreach ($config['topics'] as $name => $conf) {
             $def->addMethodCall('setTopic', array($name, $conf));
             if ($conf['consumers']) {

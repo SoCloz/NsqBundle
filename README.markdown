@@ -191,3 +191,53 @@ You also need PHPUnit and composer.
 php composer.phar install --dev
 phpunit
 ```
+
+# Stub
+
+When you have to test components which rely on SoclozNsqBundle, you can enable
+the stub mode via your configuration.
+
+```yaml
+# app/config_test.yml
+
+socloz_nsq:
+  stub: true
+```
+
+The per-topic stub use an in-memory message list. There is no change on
+publisher side. On consumer side you have to call consume() in this way:
+
+```php
+<?php
+// ...
+$topic->consume(
+    array(), // channel whitelist (optional)
+    array(
+        'limit' => 5, // number of messages to process (default=1)
+        'ignore_delay' => false, // whether to skip delayed messages (default=true)
+        'filter' => function ($payload) { // filter callback (default=null)
+                                          // if false is returned, the message
+                                          // will be skipped
+            // ...
+        },
+        'consumers' => array( // overriding consumers list (default=empty list)
+            'acme.channel1' => function ($payload) {
+                // ...
+            },
+        ),
+    ),
+);
+```
+
+The following helper methods are also available:
+
+```php
+<?php
+// clear message list
+$topic->clear();
+
+// delete messages filtered by the given callback
+$topic->delete(function ($payload) {
+    // ...
+});
+```

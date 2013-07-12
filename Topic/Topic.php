@@ -56,7 +56,7 @@ class Topic
      */
     private $subscribedChannels = array();
 
-    public function __construct($name, array $hosts, LookupInterface $lookup = null, LoggerInterface $logger = null)
+    public function __construct($name, array $hosts = array('localhost'), LookupInterface $lookup = null, LoggerInterface $logger = null)
     {
         $this->name = $name;
         $this->nsq = new nsqphp($lookup, null, null, $logger);
