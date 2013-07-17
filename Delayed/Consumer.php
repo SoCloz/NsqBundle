@@ -25,7 +25,7 @@ class Consumer implements ConsumerInterface
         $message = Message::factory($payload);
         $remaining = $message->getScheduledAt() - time();
         if ($remaining > 0) {
-            throw new RequeueMessageException($remaining * 1000);
+            throw new RequeueMessageException(min(3600, $remaining) * 1000);
         }
         $target = $this->topicManager->getTopic($message->getTargetTopic());
         if (!$target) {
