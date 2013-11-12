@@ -67,18 +67,19 @@ class Stub extends Topic
         $this->messages = array();
     }
 
-    public function getMessageDelays($filter)
+    public function getMessages($filter)
     {
         if (!is_callable($filter)) {
             throw new \InvalidArgumentException("Invalid filter callback");
         }
-        $delays = array();
+        $messages = array();
         foreach ($this->messages as $m) {
-            if ($filter($m['payload'])) {
-                $delays[] = $m['delay'];
+            $data = $filter($m['payload'], $m['delay']);
+            if ($data !== null) {
+                $messages[] = $data;
             }
         }
-        return $delays;
+        return $messages;
     }
 
     public function delete($filter)
