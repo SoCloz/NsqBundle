@@ -92,4 +92,13 @@ class Stub extends Topic
             }
         }
     }
+
+    public function getMessagePayloads()
+    {
+        $payloads = array();
+        foreach ($this->messages as $m) {
+            $payloads[] = $m['payload'];
+        }
+        return $payloads;
+    }
 }
