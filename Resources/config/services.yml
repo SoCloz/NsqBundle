@@ -7,12 +7,14 @@ services:
     arguments: ["@logger"]
   socloz.nsq:
     class: Socloz\NsqBundle\Topic\Manager
+    lazy: true
     arguments:
       - %socloz.nsq.delayed.topic_name%
       - "@?socloz.nsq.lookup"
       - "@socloz.nsq.logger"
   socloz.nsq.delayed_messages.consumer:
     class: Socloz\NsqBundle\Delayed\Consumer
+    lazy: true
     arguments: ["@socloz.nsq"]
     tags:
     -  { name: socloz.nsq.consumer, topic: %socloz.nsq.delayed.topic_name%, channel: default }
