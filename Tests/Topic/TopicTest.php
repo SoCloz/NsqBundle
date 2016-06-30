@@ -165,7 +165,7 @@ class TopicTest extends \PHPUnit_Framework_TestCase implements ConsumerInterface
     {
         $time = time();
         $this->assertLessThanOrEqual($time, $ts);
-        $this->assertGreaterThanOrEqual($time - 1, $ts);
+        $this->assertGreaterThanOrEqual($time - 2, $ts);
     }
 
     public function tearDown()
